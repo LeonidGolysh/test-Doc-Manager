@@ -3,7 +3,6 @@ package org.example.test_task;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.print.Doc;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -108,7 +107,7 @@ public class DocumentManager {
      */
     public Optional<Document> findById(String id) {
 
-        return Optional.empty();
+        return Optional.ofNullable(storage.get(id));
     }
 
     @Data
