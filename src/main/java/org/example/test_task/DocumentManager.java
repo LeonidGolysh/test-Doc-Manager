@@ -74,27 +74,26 @@ public class DocumentManager {
                 && matchesCreatedRange(doc, request.getCreatedFrom(), request.getCreatedTo());
     }
 
-    private boolean isNotNullOrEmpty(List<?> list) {
+    private boolean isNullOrEmpty(List<?> list) {
         return list == null || list.isEmpty();
     }
 
     private boolean matchesTitlePrefixes(Document doc, List<String> titlePrefix) {
-
-        return isNotNullOrEmpty(titlePrefix) || titlePrefix.stream().anyMatch(prefix -> doc.getTitle().startsWith(prefix));
+        return isNullOrEmpty(titlePrefix) || titlePrefix.stream().anyMatch(doc.getTitle()::startsWith);
     }
 
     private boolean matchesContainsContests(Document doc, List<String> containsContents) {
-        return isNotNullOrEmpty(containsContents) || containsContents.stream().anyMatch(content -> doc.getContent().startsWith(content));
+        return isNullOrEmpty(containsContents) || containsContents.stream().anyMatch(doc.getContent()::contains);
     }
 
     private boolean matchesAuthorIds(Document doc, List<String> authorIds) {
-        return isNotNullOrEmpty(authorIds) || authorIds.contains(doc.getAuthor().getId());
+        return isNullOrEmpty(authorIds) || authorIds.contains(doc.getAuthor() != null ?doc.getAuthor().getId() : null);
     }
 
     private boolean matchesCreatedRange(Document doc, Instant createdFrom, Instant createdTo) {
         Instant created = doc.getCreated();
-        return (createdFrom != null || created.isBefore(createdFrom))
-                && (createdTo != null || created.isAfter(createdTo));
+        return created != null && (createdFrom == null || !created.isBefore(createdFrom))
+                && (createdTo == null || !created.isAfter(createdTo));
     }
 
     /**
