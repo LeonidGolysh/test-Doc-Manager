@@ -4,9 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * For implement this task focus on clear code, and make this solution as simple readable as possible
@@ -26,9 +24,25 @@ public class DocumentManager {
      * @param document - document content and author data
      * @return saved document
      */
-    public Document save(Document document) {
 
-        return null;
+    //Document storage
+    private final Map<String, Document> storage = new HashMap<>();
+
+    public Document save(Document document) {
+        if (document.getId() == null || document.getId().isEmpty()) {
+            document.setId(UUID.randomUUID().toString());
+        }
+
+        Document existing = storage.get(document.getId());
+        if (existing != null) {
+            existing.setTitle(document.getTitle());
+            existing.setContent(document.getContent());
+            existing.setAuthor(document.getAuthor());
+        } else {
+            storage.get(document.getId());
+        }
+
+        return storage.get(document.getId());
     }
 
     /**
